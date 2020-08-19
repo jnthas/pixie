@@ -1,20 +1,75 @@
 #include <Arduino.h>
 
-enum Expression {
+bool buttonPressed;
+
+enum ExpressionEnum {
   NONE = 0,
   IDLE = 1,
   HAPPY = 2,
   SAD = 3,  
   CURIOUS = 4,
   SLEEPING = 5
-} expression;
+};
+
+enum ReasonEnum {
+  NO_REASON,
+  HIGH_TEMPERATURE,
+  DRY_SOIL,
+  SOIL_WATERED,
+  HAPPY_TIMEDOUT,
+  LIGHTS_ON,
+  LIGHTS_OFF
+};
 
 
-struct History {
-  Expression current;
-  Expression previous;
-} history;
+class State {
+  private: 
+    ExpressionEnum _current;
+    ExpressionEnum _previous;
+    ReasonEnum reason;
 
+  public:  
+    State(ExpressionEnum expression) {
+      this->_current = expression;
+      this->_previous = NONE;
+    }
+    void setState(ExpressionEnum expression, ReasonEnum reason) {
+      this->_previous = _current;
+      this->_current = expression;
+      this->reason = reason;
+    } 
+    bool is(ExpressionEnum state) {
+      return this->_current == state;
+    }
+    bool was(ExpressionEnum state) {
+      return this->_previous == state;
+    }
+    ExpressionEnum getCurrentState() {
+      return this->_current;
+    }
+    ExpressionEnum getPreviousState() {
+      return this->_previous;
+    }
+    ReasonEnum getReason() {
+      return this->reason;
+    }
+    String getName(ExpressionEnum expression) {
+      switch(expression) {
+        case IDLE:
+          return "Idle";
+        case HAPPY:
+          return "Happy";
+        case SAD:  
+          return "Sad";
+        case CURIOUS:
+          return "Curious";
+        case SLEEPING:
+          return "Sleeping";
+        default:
+          return "None";
+      }
+    }
+};
 
 class Sensors {
   public:
@@ -22,110 +77,207 @@ class Sensors {
     int ldr;
     int dht;
     int soil;
-
+    Sensors() {
+      this->pir = 0;
+      this->ldr = 6;
+      this->dht = 0;
+      this->soil = 0;
+    }
     void read() {
-      this->pir = 10;
-      this->ldr = 10;
-      this->dht = 10;
-      this->soil = 10;      
-    }
-};
-
-
-class State {
-  public:
-    virtual void determineState(Sensors& sensors, History& history) = 0;
-    virtual bool canHandle(Expression expression) = 0;
-};
-
-class SadState: public State {
-   public:
-    void determineState(Sensors& sensors, History& history) {
-      Serial.println("determine state - sad");
-    }
-    bool canHandle(Expression expression) {
-      return expression == SAD;
-    }
-};
-
-class SleepingState: public State {
-  public:
-    void determineState(Sensors& sensors, History& history) {
-      if (sensors.dht >= 11 && history.current == SLEEPING) {
-        history.current = SAD;
-      } else {
-        history.current = IDLE;
+      if (digitalRead(2) == LOW && digitalRead(6) != LOW) {
+        this->pir++;
+        buttonPressed = true;
+      } else if (digitalRead(2) == LOW && digitalRead(6) == LOW) {
+        this->pir--;
+        buttonPressed = true;
       }
+
+      if (digitalRead(3) == LOW && digitalRead(6) != LOW) {
+        this->ldr++;
+        buttonPressed = true;
+      } else if (digitalRead(3) == LOW && digitalRead(6) == LOW) {
+        this->ldr--;
+        buttonPressed = true;
+      }
+
+      if (digitalRead(4) == LOW && digitalRead(6) != LOW) {
+        this->dht++;
+        buttonPressed = true;
+      } else if (digitalRead(4) == LOW && digitalRead(6) == LOW) {
+        this->dht--;
+        buttonPressed = true;
+      }
+
+      if (digitalRead(5) == LOW && digitalRead(6) != LOW) {
+        this->soil++;
+        buttonPressed = true;
+      } else if (digitalRead(5) == LOW && digitalRead(6) == LOW) {
+        this->soil--;
+        buttonPressed = true;
+      }
+
+
+
     }
-    bool canHandle(Expression expression) {
-      return expression == SLEEPING;
+    bool isPresent() {
+      return pir > 0;
+    }
+    bool isDark() {
+      return ldr < 5;
+    }
+    bool isHot() {
+      return dht > 5;
+    }
+    bool isDry() {
+      return soil < 5;
+    }
+
+};
+
+
+class Expression {
+  public:
+   /**
+    * Evaluate the current state based on sensors and current state
+    * Returns true if state has changed
+    **/ 
+    virtual bool evaluate(Sensors& sensors, State& state) = 0;
+};
+
+class IdleExpression: public Expression {
+   public:
+    bool evaluate(Sensors& sensors, State& state) override {
+      //Serial.println("Evaluate IDLE");
+      if (!state.is(IDLE)) 
+        return false;
+
+      if (sensors.isDry()) {
+        state.setState(SAD, DRY_SOIL);
+      } else if (sensors.isDark()) {
+        state.setState(SLEEPING, LIGHTS_OFF);
+      }
+
+
+      return state.was(IDLE);
+    }
+};
+
+class SadExpression: public Expression {
+   public:
+    bool evaluate(Sensors& sensors, State& state) override {
+      //Serial.println("Evaluate SAD");
+
+      if (!state.is(SAD))
+        return false;
+
+      if (!sensors.isDry()) {
+        state.setState(HAPPY, SOIL_WATERED);
+      }
+      
+      return state.was(SAD);
+    }
+};
+
+class SleepingExpression: public Expression {
+  public:
+    bool evaluate(Sensors& sensors, State& state) override {
+      //Serial.println("Evaluate SLEEPING");
+      if (!state.is(SLEEPING)) 
+        return false;
+ 
+      if (!sensors.isDark()) {
+        state.setState(IDLE, LIGHTS_ON);  
+      }
+
+      return state.was(SLEEPING);
+    }
+};
+
+class HappyExpression: public Expression {
+  private:
+    unsigned long timeout = 0;
+  public:
+    bool evaluate(Sensors& sensors, State& state) override {
+      //Serial.println("Evaluate HAPPY");
+
+      if (!state.is(HAPPY))
+        return false;
+
+      if (timeout == 0) {
+        timeout = millis();
+      } else if ((millis() - timeout) > 3000) {
+        state.setState(IDLE, HAPPY_TIMEDOUT);
+        timeout = 0;
+      }
+      
+      return state.was(HAPPY);
     }
 };
 
 
+State state(IDLE);
 Sensors sensors;
 
-SleepingState sleepingState;
-SadState sadState;
+IdleExpression idleState;
+SleepingExpression sleepingState;
+SadExpression sadState;
+HappyExpression happyState;
 
-State *states[] = {&sleepingState, &sadState};
+Expression *expressions[] = {&idleState, &sleepingState, &sadState, &happyState};
 
-//State* currentState;
+unsigned long millisStart;
+
+
+
 
 void setup() {
   Serial.begin(9600);
   pinMode(LED_BUILTIN, OUTPUT);
-
-  sensors.read();
-
-  expression = SLEEPING;
   
-  history.previous = NONE;
-  history.current = SLEEPING;
+  pinMode(2, INPUT_PULLUP);
+  pinMode(3, INPUT_PULLUP);
+  pinMode(4, INPUT_PULLUP);
+  pinMode(5, INPUT_PULLUP);
+  pinMode(6, INPUT_PULLUP);
 
-  //current.setCurrent(sleepingState);
+  millisStart = millis();
+
+
+  // Serial.println("GETSAD: ");
+  // Serial.println(getSad()->canHandle(SAD));
+  // Serial.println(getSad()->canHandle(HAPPY));
 }
 
+void checkState() {
+  Serial.print("PIR: ");
+  Serial.print(sensors.pir);
+  Serial.print(" LDR: ");
+  Serial.print(sensors.ldr);
+  Serial.print(" DHT: ");
+  Serial.print(sensors.dht);
+  Serial.print(" SOIL: ");
+  Serial.println(sensors.soil);
 
-void showValue(Expression exp) {
+  Serial.println(state.getName(state.getCurrentState()));
 
-  switch(exp) {
-    case NONE:
-      Serial.println("None");
+  for (int i=0; i<4; i++) {
+    if (expressions[i]->evaluate(sensors, state)) {
+      Serial.println("State has changed from " + state.getName(state.getPreviousState()) + " to " + state.getName(state.getCurrentState()));
       break;
-    case IDLE:
-      Serial.println("Idle");
-      break;      
-    case HAPPY:
-      Serial.println("Happy");
-      break;
-    case SAD:  
-      Serial.println("Sad");
-      break;
-    case CURIOUS:
-      Serial.println("Curious");
-      break;
-     case SLEEPING:
-      Serial.println("Sleeping");
-      break;   
-  }
-}
-
-
-void loop() {
-  delay(5000);
-
-  sensors.read();
-  //Serial.println(sensors.pir);
-
-  Serial.println("Current State: ");
-  showValue(history.current);
-
-  for (int i=0; i<2; i++) {
-    if (states[i]->canHandle(history.current)) {
-      states[i]->determineState(sensors, history);
     }
   }
-
-  //sleepingState.determineState(sensors, history);
 }
+
+void loop() {
+  //
+  
+  if (!buttonPressed) {
+    sensors.read();
+  }
+  if ((millis() - millisStart) > 1000) {
+    checkState();
+    millisStart = millis();
+    buttonPressed = false;
+  }
+}
+
