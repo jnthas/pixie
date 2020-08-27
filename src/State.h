@@ -12,7 +12,9 @@ enum ExpressionEnum {
   CURIOUS = 8,
   SLEEPING = 16,
   SUN = 32,
-  WATER = 64
+  WATER = 64,
+  HEART = 128,
+  MOON = 256
 };
 
 enum ReasonEnum {

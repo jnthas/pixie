@@ -13,7 +13,7 @@
 #include "HappyExpression.h"
 #include "CuriousExpression.h"
 
-#include "ui/Sprites.h"
+#include "ui/UIManager.h"
 
 int DIN = 8; 
 int CS =  9;
@@ -21,11 +21,9 @@ int CLK = 10;
 
 LedControl lc = LedControl(DIN,CLK,CS,1);
 
-
-
 State state(IDLE);
 Sensors sensors;
-SpriteRender ui;
+UIManager ui(&lc);
 
 IdleExpression idleState;
 SleepingExpression sleepingState;
