@@ -14,7 +14,7 @@ bool IdleExpression::evaluate(Sensors& sensors, State& state) {
     state.setState(CURIOUS, MOTION_DETECTED);
 
   } else if (sensors.isDark()) {
-    state.setState(SLEEPING, LIGHTS_OFF);
+    state.setState(SLEEPING | MOON, LIGHTS_OFF);
 
   } else if (sensors.isHot() && 
       sensors.isBright() && 
@@ -22,7 +22,7 @@ bool IdleExpression::evaluate(Sensors& sensors, State& state) {
       !state.was(HAPPY | SUN))  {
     state.setState(HAPPY | SUN, IN_THE_SUN);
 
-  } else if (sensors.isBright() && sensors.isMaxTemperature())  {
+  } else if (sensors.isMaxTemperature())  {
     state.setState(SAD | SUN, HIGH_TEMPERATURE);
 
   } else if (sensors.isDry()) {

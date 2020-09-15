@@ -14,6 +14,12 @@ UIManager::UIManager(LedControl* lcInstance)
 
 void UIManager::drawImage(uint64_t image)
 { 
+  // unsigned long long1 = (unsigned long)((image & 0xFFFF0000) >> 16 );
+  // unsigned long long2 = (unsigned long)((image & 0x0000FFFF));
+  // String hex = String(long1, HEX) + String(long2, HEX); // six octets
+  // Serial.println(hex);
+
+
   for (int i = 0; i < 8; i++)
   {
     byte row = (image >> i * 8) & 0xFF;
@@ -41,10 +47,13 @@ int UIManager::countExpressions(ExpressionEnum expression)
 
 void UIManager::update(ExpressionEnum expression)
 {
+  // Serial.print("Updating display to: ");
+  // Serial.println(expression);
 
   byte numImages = 0;
   indexCurrentExpression = 0;
   repeatCount = 0;
+  indexCurrentFrame = 0;
 
   for (byte i = 0; i < SPRITE_METADATA_ARR_SIZE; i++)
   {
@@ -59,8 +68,7 @@ void UIManager::update(ExpressionEnum expression)
 
   totalNumExpressions = numImages;
 
-  Serial.println(totalNumExpressions);
-
+  //Serial.println(totalNumExpressions);
   updated = true;
 }
 

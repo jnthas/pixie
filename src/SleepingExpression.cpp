@@ -19,7 +19,7 @@ bool SleepingExpression::evaluate(Sensors& sensors, State& state) {
   } else if (sensors.isWatering()) {
     state.setState(HAPPY | WATER, SOIL_WATERED);
 
-  } else if (sensors.isBright()) {
+  } else if (!sensors.isDark()) {
     if (timeout == 0) {
       timeout = millis();
     } else if ((millis() - timeout) > SLEEPING_WAKEUP_TIMEOUT) {

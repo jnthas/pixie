@@ -1,52 +1,45 @@
 #include <Arduino.h>
 #include "Params.h"
 #include "Sensors.h"
+#include "dht11.h"
+
+dht11 DHT11;
+
+//ChangeDetector soilChangeDetector;
+//ChangeDetector lightChangeDetector(5, 3);
+ChangeDetector presenceChangeDetector(10, 1, 3);
+//ChangeDetector temperatureChangeDetector;
+
+
+Sensors::Sensors() {
+  pinMode(SENSOR_LIGHT_PIN, INPUT);
+  pinMode(SENSOR_PRESENCE_PIN, INPUT);
+  pinMode(SENSOR_TEMPERATURE_PIN, INPUT);
+  pinMode(SENSOR_SOIL_PIN, INPUT);
+
+  // pinMode(SENSOR_PRESENCE_PIN, INPUT_PULLUP);
+  // pinMode(SENSOR_TEMPERATURE_PIN, INPUT_PULLUP);
+  // pinMode(SENSOR_SOIL_PIN, INPUT_PULLUP);
+  // pinMode(6, INPUT_PULLUP);
+
+}
 
 void Sensors::read() {
-  if (digitalRead(2) == LOW && digitalRead(6) != LOW) {
-    this->pir = true;
-    buttonPressed = true;
-  } else if (digitalRead(2) == LOW && digitalRead(6) == LOW) {
-    this->pir = false;
-    buttonPressed = true;
-  }
+  //soil = 20;
+  DHT11.read(SENSOR_TEMPERATURE_PIN);
+  ldr = analogRead(SENSOR_LIGHT_PIN);
+  pir = analogRead(SENSOR_PRESENCE_PIN);
+  
+  temperature = (float) DHT11.temperature;
+  humidity = (float) DHT11.humidity;
 
-  if (digitalRead(3) == LOW && digitalRead(6) != LOW) {
-    this->ldr++;
-    buttonPressed = true;
-  } else if (digitalRead(3) == LOW && digitalRead(6) == LOW) {
-    this->ldr--;
-    buttonPressed = true;
-  }
+  soil = analogRead(SENSOR_SOIL_PIN);  
 
-  if (digitalRead(4) == LOW && digitalRead(6) != LOW) {
-    this->dht++;
-    buttonPressed = true;
-  } else if (digitalRead(4) == LOW && digitalRead(6) == LOW) {
-    this->dht--;
-    buttonPressed = true;
-  }
 
-  if (digitalRead(5) == LOW && digitalRead(6) != LOW) {
-    int oldValue = this->soil;
-    this->soil++;
-    int newValue = this->soil;
+  presenceChangeDetector.read(pir);
 
-    this->soil_var += newValue - oldValue;
-    buttonPressed = true;
-  } else if (digitalRead(5) == LOW && digitalRead(6) == LOW) {
-    // variation stops at zero
-    int oldValue = this->soil;
-    this->soil--;
-    int newValue = this->soil;
-    
-    if (this->soil_var > 0) {
-      this->soil_var += newValue - oldValue;  
-    }
-
-    buttonPressed = true;
-  }
-
+      
+  
 }
 
 void Sensors::resetSoilVariation() {
@@ -54,11 +47,22 @@ void Sensors::resetSoilVariation() {
 }
 
 bool Sensors::isMaxTemperature() {
-  return dht > TEMPERATURE_MAX_TOLERANT;
+  return temperature > TEMPERATURE_MAX_TOLERANT;
 }
 
 bool Sensors::hasMotionDetected() {
-  return pir;
+
+  if (presenceChangeDetector.detected) {
+    
+    Serial.print("Detected variation from ");
+    Serial.print(presenceChangeDetector.firstValue);    
+    Serial.print(" to ~");
+    Serial.println(presenceChangeDetector.sum/presenceChangeDetector._detectionCycles);
+    return true;
+  }
+
+
+  return false; //abs(pir) > 10;
 }
 
 bool Sensors::isDark() {
@@ -70,7 +74,7 @@ bool Sensors::isBright() {
 }
 
 bool Sensors::isHot() {
-  return dht > TEMPERATURE_MAX_IDEAL;
+  return temperature > TEMPERATURE_MAX_IDEAL;
 }
 
 bool Sensors::isDry() {
@@ -82,6 +86,6 @@ bool Sensors::isWet() {
 }
 
 bool Sensors::isWatering() {
-  return soil_var > SOIL_VARIATION;
+  return false;
 }
     

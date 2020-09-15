@@ -13,8 +13,8 @@ bool SadExpression::evaluate(Sensors& sensors, State& state) {
   if (sensors.hasMotionDetected()) {
     state.setState(CURIOUS, MOTION_DETECTED);
 
-  } else if (sensors.isWatering() && !sensors.isDry()) {
-    state.setState(HAPPY, SOIL_WATERED);
+  } else if (sensors.isWatering() || !sensors.isDry()) {
+    state.setState(HAPPY | HEART, SOIL_WATERED);
 
   } if (!sensors.isMaxTemperature() && state.is(SAD | SUN))  {
     state.setState(state.getPreviousState(), TEMPERATURE_DECRESED);
