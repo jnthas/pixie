@@ -7,9 +7,11 @@ dht11 DHT11;
 
 //ChangeDetector soilChangeDetector;
 //ChangeDetector lightChangeDetector(5, 3);
-ChangeDetector presenceChangeDetector(10, 1, 3);
+ChangeDetector presenceChangeDetector(10, 2, 2);
 //ChangeDetector temperatureChangeDetector;
 
+
+bool presenceDetected = false;
 
 Sensors::Sensors() {
   pinMode(SENSOR_LIGHT_PIN, INPUT);
@@ -25,7 +27,6 @@ Sensors::Sensors() {
 }
 
 void Sensors::read() {
-  //soil = 20;
   DHT11.read(SENSOR_TEMPERATURE_PIN);
   ldr = analogRead(SENSOR_LIGHT_PIN);
   pir = analogRead(SENSOR_PRESENCE_PIN);
@@ -33,13 +34,9 @@ void Sensors::read() {
   temperature = (float) DHT11.temperature;
   humidity = (float) DHT11.humidity;
 
-  soil = analogRead(SENSOR_SOIL_PIN);  
-
-
-  presenceChangeDetector.read(pir);
-
-      
+  soil = analogRead(SENSOR_SOIL_PIN);
   
+  presenceDetected = presenceChangeDetector.handle(pir);
 }
 
 void Sensors::resetSoilVariation() {
@@ -51,18 +48,17 @@ bool Sensors::isMaxTemperature() {
 }
 
 bool Sensors::hasMotionDetected() {
-
-  if (presenceChangeDetector.detected) {
+  if (presenceDetected) {
     
     Serial.print("Detected variation from ");
     Serial.print(presenceChangeDetector.firstValue);    
     Serial.print(" to ~");
     Serial.println(presenceChangeDetector.sum/presenceChangeDetector._detectionCycles);
+    presenceDetected = false;
     return true;
   }
 
-
-  return false; //abs(pir) > 10;
+  return presenceDetected;
 }
 
 bool Sensors::isDark() {
