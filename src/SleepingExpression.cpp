@@ -3,12 +3,15 @@
 #include "Expression.h"
 #include "State.h"
 #include "Params.h"
+#include "DecisionMaker.h"
 #include "SleepingExpression.h"
 
 bool SleepingExpression::evaluate(Sensors& sensors, State& state) {
   DEBUG_PRINTLN("Evaluate SLEEPING");
   if (!state.is(SLEEPING)) 
     return false;
+
+  //short TIME_TO_WAKEUP = DecisionMaker::waitSomeTime(SLEEPING_TIMEOUT);
 
   if (sensors.isMaxTemperature())  {
     state.setState(SAD | SUN, HIGH_TEMPERATURE);
@@ -22,7 +25,7 @@ bool SleepingExpression::evaluate(Sensors& sensors, State& state) {
   } else if (!sensors.isDark()) {
     if (timeout == 0) {
       timeout = millis();
-    } else if ((millis() - timeout) > SLEEPING_WAKEUP_TIMEOUT) {
+    } else if ((millis() - timeout) > TIME_TO_WAKEUP) {
       timeout = 0;
       // TODO I could create a "next" state concept, in this case, next state would be IDLE, and current state CURIOUS
       state.setState(IDLE, LIGHTS_ON);

@@ -5,6 +5,7 @@
 #include "State.h"
 #include "Params.h"
 #include "CuriousExpression.h"
+#include "DecisionMaker.h"
 
 bool CuriousExpression::evaluate(Sensors& sensors, State& state) {
   DEBUG_PRINTLN("Evaluate CURIOUS");
@@ -17,7 +18,14 @@ bool CuriousExpression::evaluate(Sensors& sensors, State& state) {
     timeout = millis();
   } else if ((millis() - timeout) > limit) {
     timeout = 0;
-    state.setState(state.getPreviousState(), CURIOUS_TIMEDOUT);        
+
+    if (DecisionMaker::doYouLikeIt(25) && !state.was(SAD)) {
+      state.setState(HAPPY, CURIOUS_TIMEDOUT);
+    } else {
+      state.setState(state.getPreviousState(), CURIOUS_TIMEDOUT);
+    }
+
+    
   }
   
   return state.was(CURIOUS);

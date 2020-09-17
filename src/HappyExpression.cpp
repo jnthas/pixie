@@ -19,9 +19,6 @@ bool HappyExpression::evaluate(Sensors& sensors, State& state) {
     timeout = millis();
   } else if ((millis() - timeout) > limit) {
     timeout = 0;
-    if (state.getReason() == SOIL_WATERED) {
-      sensors.resetSoilVariation();
-    }
     state.setState(IDLE, HAPPY_TIMEDOUT);
   }
   

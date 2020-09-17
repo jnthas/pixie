@@ -3,7 +3,9 @@
 
 #include <Arduino.h>
 
-struct ChangeDetector {
+#define MAX_SENSOR_VALUE 4095
+
+struct SensorTrigger {
   int _threshold;
   byte _detectionCycles;
   byte _recoveryCycles;
@@ -14,16 +16,16 @@ struct ChangeDetector {
   int currentValue;
   int sum;
   byte cycleCounter;
+  bool triggered = false;
 
-  ChangeDetector(int threshold, byte detectionCycles, byte recoveryCycles) {
+  SensorTrigger(int threshold, byte detectionCycles, byte recoveryCycles) {
     this->_threshold = threshold;
     this->_detectionCycles = detectionCycles;
     this->_recoveryCycles = recoveryCycles;
   }
   
-  bool handle(int value) {
+  void handle(int value) {
     this->currentValue = value;    
-    bool changeDetected = false;
 
     if (this->recovering) {
       Serial.println("Recovering");
@@ -33,6 +35,7 @@ struct ChangeDetector {
         Serial.println("Recovered");
         this->recovering = false;
         this->possibleChange = false;
+        this->triggered = false;
 
         this->cycleCounter = 0;
         this->firstValue = 0;
@@ -66,30 +69,44 @@ struct ChangeDetector {
         Serial.println("Detected change");
         this->recovering = true;
         this->cycleCounter = 0;
-        changeDetected = true;
+        this->triggered = true;
       }
     }
 
     this->previousValue = this->currentValue;
-
-    return changeDetected;
   }
 
+  bool checkTriggerAndDisable() {
+    if (this->triggered) {
+      this->triggered = false;
+      return true;
+    }
+
+    return false;
+  }
+
+  bool isIncreased() {
+    return (firstValue <= (sum/_detectionCycles));
+  }
+
+  bool isDecreased() {
+    return (firstValue > (sum/_detectionCycles));
+  }
+  
 };
 
 
 class Sensors 
 {
-  public:
+  private:
     int pir = 0;
     int ldr = 0;
     float temperature = 0;
     float humidity = 0;
     int soil = 0;
-    int soil_var = 0;
+  public:    
     Sensors();
     void read();
-    void resetSoilVariation();
     bool isMaxTemperature();
     bool hasMotionDetected();
     bool isDark();

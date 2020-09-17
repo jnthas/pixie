@@ -2,6 +2,8 @@
 #include "GlobalDefinition.h"
 #include "Expression.h"
 #include "State.h"
+#include "Params.h"
+#include "DecisionMaker.h"
 #include "IdleExpression.h"
 
 bool IdleExpression::evaluate(Sensors& sensors, State& state) {
@@ -9,12 +11,21 @@ bool IdleExpression::evaluate(Sensors& sensors, State& state) {
   if (!state.is(IDLE)) 
     return false;
 
+  //short TIME_TO_SLEEP = DecisionMaker::waitSomeTime(SLEEPING_TIMEOUT);
+
   
   if (sensors.hasMotionDetected()) {
     state.setState(CURIOUS, MOTION_DETECTED);
 
   } else if (sensors.isDark()) {
-    state.setState(SLEEPING | MOON, LIGHTS_OFF);
+    // TODO create a schedule class to deal with situations like this
+    if (timeout == 0) {
+      timeout = millis();
+    } else if ((millis() - timeout) > TIME_TO_SLEEP) {
+      timeout = 0;
+      state.setState(SLEEPING | MOON, LIGHTS_OFF);
+    }
+   
 
   } else if (sensors.isHot() && 
       sensors.isBright() && 

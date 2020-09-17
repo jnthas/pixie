@@ -50,13 +50,6 @@ void setup() {
 }
 
 void checkState() {
-  Serial.print("PIR: "); Serial.print(sensors.pir);
-  Serial.print(" LDR: "); Serial.print(sensors.ldr);
-  Serial.print(" TEMP: "); Serial.print(sensors.temperature);
-  Serial.print(" HUM: "); Serial.print(sensors.humidity);
-  Serial.print(" SOIL: "); Serial.print(sensors.soil);
-  Serial.print(" SOIL_VAR: "); Serial.println(sensors.soil_var);
-
   DEBUG_PRINTLN(state.getName(state.getCurrentState()));
 
   for (int i=0; i<EXPRESSION_ARR_SIZE; i++) {
