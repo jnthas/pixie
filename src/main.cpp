@@ -46,6 +46,8 @@ void setup() {
   // Clear the display
   lc.clearDisplay(0);  
 
+  DecisionMaker::initialize();
+
   initialMillis = millis();
 }
 

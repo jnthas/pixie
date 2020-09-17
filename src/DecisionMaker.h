@@ -6,10 +6,8 @@
 #include "Expression.h"
 
 class DecisionMaker {
-  private:
-    static void seed();
-
   public:
+    static void initialize();
     static bool doYouLikeIt(byte humor);
     static short waitSomeTime(short maxSeconds);
 };

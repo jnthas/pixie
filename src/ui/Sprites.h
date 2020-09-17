@@ -69,9 +69,9 @@ const unsigned short PIX_HEART_MS[] = {
 
 
 const uint64_t PIX_MOON[] = {
-  0x00000042667e3c18,
-  0x00100042667e3c18,
-  0x10281042667e3c18
+  0x00000042663c1800,
+  0x00100042663c1800,
+  0x10281042663c1800
 };
 const unsigned short PIX_MOON_MS[] = {
   1000,100,100

@@ -5,36 +5,25 @@
 
 dht11 DHT11;
 
-SensorTrigger presenceTrigger(5, 2, 2);
-SensorTrigger wateringTrigger(10, 2, 2);
+SensorTrigger presenceTrigger(PRESENCE_THRESHOLD, PRESENCE_DETECTION_CYCLES, PRESENCE_RECOVERY_CYCLES);
+SensorTrigger wateringTrigger(WATERING_THRESHOLD, WATERING_DETECTION_CYCLES, WATERING_RECOVERY_CYCLES);
 
 Sensors::Sensors() {
   pinMode(SENSOR_LIGHT_PIN, INPUT);
   pinMode(SENSOR_PRESENCE_PIN, INPUT);
   pinMode(SENSOR_TEMPERATURE_PIN, INPUT);
   pinMode(SENSOR_SOIL_PIN, INPUT);
-
-  // pinMode(SENSOR_PRESENCE_PIN, INPUT_PULLUP);
-  // pinMode(SENSOR_TEMPERATURE_PIN, INPUT_PULLUP);
-  // pinMode(SENSOR_SOIL_PIN, INPUT_PULLUP);
-  // pinMode(6, INPUT_PULLUP);
-
-}
-
-
-short perc(float value) {
-  return (value * 1000) / MAX_SENSOR_VALUE;
 }
 
 void Sensors::read() {
   DHT11.read(SENSOR_TEMPERATURE_PIN);
-  ldr = perc(analogRead(SENSOR_LIGHT_PIN));
-  pir = perc(analogRead(SENSOR_PRESENCE_PIN));
+  ldr = map(analogRead(SENSOR_LIGHT_PIN), 0, MAX_SENSOR_VALUE, 0, 1000);
+  pir = map(analogRead(SENSOR_PRESENCE_PIN), 0, MAX_SENSOR_VALUE, 0, 10000);
+  soil = map(MAX_SENSOR_VALUE - analogRead(SENSOR_SOIL_PIN), 0, MAX_SENSOR_VALUE, 0, 1000);
   
   temperature = (float) DHT11.temperature;
   humidity = (float) DHT11.humidity;
 
-  soil = perc(MAX_SENSOR_VALUE - analogRead(SENSOR_SOIL_PIN));
 
   Serial.print("PIR: "); Serial.print(pir);
   Serial.print(" LDR: "); Serial.print(ldr);
@@ -45,7 +34,6 @@ void Sensors::read() {
   presenceTrigger.handle(pir);
   wateringTrigger.handle(soil);
 }
-
 
 bool Sensors::isMaxTemperature() {
   return temperature > TEMPERATURE_MAX_TOLERANT;

@@ -5,7 +5,7 @@
 #include "Params.h"
 
 
-void DecisionMaker::seed() {
+void DecisionMaker::initialize() {
   unsigned long seed = 0;
   for (int i=0; i<16; i++)
   {
@@ -16,15 +16,13 @@ void DecisionMaker::seed() {
   randomSeed(seed);
 }
 
-bool DecisionMaker::doYouLikeIt(byte humor) {  
-  seed();
+bool DecisionMaker::doYouLikeIt(byte humor) {    
   byte num = random(100);
   Serial.print("Random: "); Serial.println(num);
   return humor >= num;
 }
 
 short DecisionMaker::waitSomeTime(short maxSeconds) {  
-  seed();
   short num = random(maxSeconds);
   Serial.print("Random: "); Serial.println(num);
   return num;
