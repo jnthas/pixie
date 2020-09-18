@@ -1,12 +1,11 @@
-
-#ifndef CuriousExpression_h
-#define CuriousExpression_h
+#ifndef LoadingExpression_h
+#define LoadingExpression_h
 
 #include <Arduino.h>
 #include "Expression.h"
 #include "State.h"
 
-class CuriousExpression: public Expression {
+class LoadingExpression: public Expression {
   private:
     unsigned long timeout = 0;
   public:

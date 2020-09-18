@@ -38,9 +38,12 @@ String State::getName(ExpressionEnum expression) {
     return "None";
 
   String exp;
-  
+    
+  if ((LOADING & expression) == LOADING) {
+    exp = "Loading";
+  }
   if ((IDLE & expression) == IDLE) {
-    exp = "Idle";
+    exp = exp + (exp.length() > 0 ? " & " : "") + "Idle";
   }
   if ((HAPPY & expression) == HAPPY) {
     exp = exp + (exp.length() > 0 ? " & " : "") + "Happy";
@@ -60,7 +63,7 @@ String State::getName(ExpressionEnum expression) {
   if ((WATER & expression) == WATER) {
     exp = exp + (exp.length() > 0 ? " & " : "") + "Water";
   }
-  
+    
   return exp;
 }
 

@@ -99,6 +99,16 @@ const unsigned short PIX_SUN_MS[] = {
   200,200,200,200
 };
 
+const uint64_t PIX_LOADING[] = {
+  0x000000000e0e0c00,
+  0x0000000070703000,
+  0x0030707000000000,
+  0x000c0e0e00000000
+};
+const unsigned short PIX_LOADING_MS[] = {
+  250,250,250,250
+};
+
 
 struct SpriteMetadata
 {
@@ -113,6 +123,7 @@ struct SpriteMetadata
 };
 
 SpriteMetadata sprites[] = {
+  { .name = "Loading", .expression = LOADING, .images = PIX_LOADING, .interval = PIX_LOADING_MS, .length = sizeof(PIX_LOADING)/8, .repeats = 10, .intensity = 0 },
   { .name = "Idle", .expression = IDLE, .images = PIX_IDLE, .interval = PIX_IDLE_MS, .length = sizeof(PIX_IDLE)/8, .repeats = 1, .intensity = 0 },
   { .name = "Happy", .expression = HAPPY, .images = PIX_HAPPY, .interval = PIX_HAPPY_MS, .length = sizeof(PIX_HAPPY)/8, .repeats = 3, .intensity = 0 },
   { .name = "Sad", .expression = SAD, .images = PIX_SAD, .interval = PIX_SAD_MS, .length = sizeof(PIX_SAD)/8, .repeats = 3, .intensity = 0 },

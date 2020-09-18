@@ -6,15 +6,16 @@
 
 enum ExpressionEnum {
   NONE = 0,
-  IDLE = 1,
-  HAPPY = 2,
-  SAD = 4,  
-  CURIOUS = 8,
-  SLEEPING = 16,
-  SUN = 32,
-  WATER = 64,
-  HEART = 128,
-  MOON = 256
+  LOADING = 1,
+  IDLE = 2,
+  HAPPY = 4,
+  SAD = 8,  
+  CURIOUS = 16,
+  SLEEPING = 32,
+  SUN = 64,
+  WATER = 128,
+  HEART = 256,
+  MOON = 512  
 };
 
 enum ReasonEnum {
@@ -29,7 +30,8 @@ enum ReasonEnum {
   LIGHTS_OFF,
   MOTION_DETECTED,
   IN_THE_SUN,
-  PLANT_TOUCH
+  PLANT_TOUCH,
+  LOADING_TIMEDOUT
 };
 
 

@@ -12,19 +12,19 @@ void DecisionMaker::initialize() {
     seed = seed | ((analogRead(SENSOR_SOIL_PIN) & 0x01) << i) | ((analogRead(SENSOR_LIGHT_PIN) & 0x01) << i);
   }
 
-  Serial.print("Seed: "); Serial.println(seed);
+  DEBUG_PRINT("Seed: "); DEBUG_PRINTLN(seed);
   randomSeed(seed);
 }
 
 bool DecisionMaker::doYouLikeIt(byte humor) {    
   byte num = random(100);
-  Serial.print("Random: "); Serial.println(num);
+  DEBUG_PRINT("Random: "); DEBUG_PRINTLN(num);
   return humor >= num;
 }
 
 short DecisionMaker::waitSomeTime(short maxSeconds) {  
   short num = random(maxSeconds);
-  Serial.print("Random: "); Serial.println(num);
+  DEBUG_PRINT("Random: "); DEBUG_PRINTLN(num);
   return num;
 }
 

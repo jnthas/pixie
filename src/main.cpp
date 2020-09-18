@@ -12,6 +12,7 @@
 #include "SadExpression.h"
 #include "HappyExpression.h"
 #include "CuriousExpression.h"
+#include "LoadingExpression.h"
 
 #include "ui/UIManager.h"
 
@@ -21,7 +22,7 @@ int CLK = 32;
 
 LedControl lc = LedControl(DIN,CLK,CS,1);
 
-State state(IDLE);
+State state(LOADING);
 Sensors sensors;
 UIManager ui(&lc);
 
@@ -30,9 +31,10 @@ SleepingExpression sleepingState;
 SadExpression sadState;
 HappyExpression happyState;
 CuriousExpression curiousState;
+LoadingExpression loadingState;
 
 //  IDLE, HAPPY, SAD, CURIOUS, SLEEPING 
-Expression *expressions[] = { &idleState, &happyState, &sadState, &curiousState, &sleepingState };
+Expression *expressions[] = { &idleState, &happyState, &sadState, &curiousState, &sleepingState, &loadingState };
 const byte EXPRESSION_ARR_SIZE = sizeof(expressions) / sizeof(expressions[0]);
 unsigned long initialMillis;
 
@@ -56,7 +58,7 @@ void checkState() {
 
   for (int i=0; i<EXPRESSION_ARR_SIZE; i++) {
     if (expressions[i]->evaluate(sensors, state)) {
-      DEBUG_PRINTLN("State has changed from " + state.getName(state.getPreviousState()) + " to " + state.getName(state.getCurrentState()));
+      DEBUG_PRINTLN("State has changed from " + state.getName(state.getPreviousState()) + " to " + state.getName(state.getCurrentState()));      
       ui.update(state.getCurrentState());
       break;
     }
@@ -64,7 +66,6 @@ void checkState() {
 }
 
 void loop() {
-  
   if ((millis() - initialMillis) > SENSOR_READING_FREQ) {
     sensors.read();
     checkState();

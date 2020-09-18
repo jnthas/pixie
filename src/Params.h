@@ -5,7 +5,7 @@
 #include "DecisionMaker.h"
 
 // System
-const unsigned int SENSOR_READING_FREQ = 1000;
+const unsigned int SENSOR_READING_FREQ = 500;
 
 const byte SENSOR_SOIL_PIN = 34;
 const byte SENSOR_PRESENCE_PIN = 26;
@@ -15,6 +15,8 @@ const byte SENSOR_TOUCH_PIN = 4;
 
 
 // Expressions
+const unsigned int PIXIE_LOADING_DURATION = 15000;
+
 const unsigned int HAPPY_SHORT_TIME = 5000;
 const unsigned int HAPPY_LONG_TIME = 10000;
 
@@ -37,7 +39,7 @@ const short WATERING_DETECTION_CYCLES = 3;
 const short WATERING_RECOVERY_CYCLES = 3;
 
 const short TOUCH_THRESHOLD = 10;
-const short TOUCH_DETECTION_CYCLES = 1;
+const short TOUCH_DETECTION_CYCLES = 2;
 const short TOUCH_RECOVERY_CYCLES = 3;
 
 
