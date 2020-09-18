@@ -28,7 +28,8 @@ enum ReasonEnum {
   LIGHTS_ON,
   LIGHTS_OFF,
   MOTION_DETECTED,
-  IN_THE_SUN
+  IN_THE_SUN,
+  PLANT_TOUCH
 };
 
 

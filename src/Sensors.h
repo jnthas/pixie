@@ -2,6 +2,7 @@
 #define Sensors_h
 
 #include <Arduino.h>
+#include "GlobalDefinition.h"
 
 #define MAX_SENSOR_VALUE 4095
 
@@ -28,11 +29,11 @@ struct SensorTrigger {
     this->currentValue = value;    
 
     if (this->recovering) {
-      Serial.println("Recovering");
+      DEBUG_PRINTLN("Recovering");
       this->cycleCounter++;
       
       if (this->cycleCounter >= this->_recoveryCycles) {
-        Serial.println("Recovered");
+        DEBUG_PRINTLN("Recovered");
         this->recovering = false;
         this->possibleChange = false;
         this->triggered = false;
@@ -53,7 +54,7 @@ struct SensorTrigger {
           this->recovering = true;
           this->cycleCounter = 0;
 
-          Serial.println("Nevermind");
+          DEBUG_PRINTLN("Nevermind");
         }
 
       } else if (abs(this->currentValue - this->previousValue) > this->_threshold) {
@@ -62,11 +63,11 @@ struct SensorTrigger {
         this->firstValue = this->previousValue;
         this->sum = this->currentValue;
 
-        Serial.println("Possible change");
+        DEBUG_PRINTLN("Possible change");
       }
 
       if (this->cycleCounter >= this->_detectionCycles) {
-        Serial.println("Detected change");
+        DEBUG_PRINTLN("Detected change");
         this->recovering = true;
         this->cycleCounter = 0;
         this->triggered = true;
@@ -104,6 +105,7 @@ class Sensors
     float temperature = 0;
     float humidity = 0;
     int soil = 0;
+    int touch = 0;
   public:    
     Sensors();
     void read();
@@ -115,6 +117,7 @@ class Sensors
     bool isDry();
     bool isWet();
     bool isWatering();
+    bool isTouching();
 };
 
 #endif

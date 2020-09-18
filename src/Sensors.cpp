@@ -7,12 +7,14 @@ dht11 DHT11;
 
 SensorTrigger presenceTrigger(PRESENCE_THRESHOLD, PRESENCE_DETECTION_CYCLES, PRESENCE_RECOVERY_CYCLES);
 SensorTrigger wateringTrigger(WATERING_THRESHOLD, WATERING_DETECTION_CYCLES, WATERING_RECOVERY_CYCLES);
+SensorTrigger touchTrigger(TOUCH_THRESHOLD, TOUCH_DETECTION_CYCLES, TOUCH_RECOVERY_CYCLES);
 
 Sensors::Sensors() {
   pinMode(SENSOR_LIGHT_PIN, INPUT);
   pinMode(SENSOR_PRESENCE_PIN, INPUT);
   pinMode(SENSOR_TEMPERATURE_PIN, INPUT);
   pinMode(SENSOR_SOIL_PIN, INPUT);
+  pinMode(SENSOR_TOUCH_PIN, INPUT);
 }
 
 void Sensors::read() {
@@ -20,6 +22,7 @@ void Sensors::read() {
   ldr = map(analogRead(SENSOR_LIGHT_PIN), 0, MAX_SENSOR_VALUE, 0, 1000);
   pir = map(analogRead(SENSOR_PRESENCE_PIN), 0, MAX_SENSOR_VALUE, 0, 10000);
   soil = map(MAX_SENSOR_VALUE - analogRead(SENSOR_SOIL_PIN), 0, MAX_SENSOR_VALUE, 0, 1000);
+  touch = touchRead(SENSOR_TOUCH_PIN);
   
   temperature = (float) DHT11.temperature;
   humidity = (float) DHT11.humidity;
@@ -29,10 +32,12 @@ void Sensors::read() {
   Serial.print(" LDR: "); Serial.print(ldr);
   Serial.print(" TEMP: "); Serial.print(temperature);
   Serial.print(" HUM: "); Serial.print(humidity);
-  Serial.print(" SOIL: "); Serial.println(soil);
+  Serial.print(" SOIL: "); Serial.print(soil);
+  Serial.print(" TOUCH: "); Serial.println(touch);
   
   presenceTrigger.handle(pir);
   wateringTrigger.handle(soil);
+  touchTrigger.handle(touch);
 }
 
 bool Sensors::isMaxTemperature() {
@@ -84,6 +89,22 @@ bool Sensors::isWatering() {
     Serial.print(wateringTrigger.firstValue);    
     Serial.print(" to ~");
     Serial.println(wateringTrigger.sum/wateringTrigger._detectionCycles);
+    return true;
+  }
+
+  return false;
+}
+
+bool Sensors::isTouching() {  
+
+  bool touching = touchTrigger.checkTriggerAndDisable();
+
+  if (touching && touchTrigger.isDecreased()) {
+    
+    Serial.print("Touching variation from ");
+    Serial.print(touchTrigger.firstValue);    
+    Serial.print(" to ~");
+    Serial.println(touchTrigger.sum/touchTrigger._detectionCycles);
     return true;
   }
 

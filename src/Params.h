@@ -11,7 +11,7 @@ const byte SENSOR_SOIL_PIN = 34;
 const byte SENSOR_PRESENCE_PIN = 26;
 const byte SENSOR_TEMPERATURE_PIN = 27;
 const byte SENSOR_LIGHT_PIN = 39;
-
+const byte SENSOR_TOUCH_PIN = 4;
 
 
 // Expressions
@@ -28,12 +28,18 @@ const float TEMPERATURE_MAX_TOLERANT = 29;
 const float TEMPERATURE_MIN_IDEAL = 12;
 const float TEMPERATURE_MAX_IDEAL = 26;
 
-const short PRESENCE_THRESHOLD = 5;
+const short PRESENCE_THRESHOLD = 10;
 const short PRESENCE_DETECTION_CYCLES = 3;
 const short PRESENCE_RECOVERY_CYCLES = 3;
+
 const short WATERING_THRESHOLD = 100;
 const short WATERING_DETECTION_CYCLES = 3;
 const short WATERING_RECOVERY_CYCLES = 3;
+
+const short TOUCH_THRESHOLD = 10;
+const short TOUCH_DETECTION_CYCLES = 1;
+const short TOUCH_RECOVERY_CYCLES = 3;
+
 
 
 // SENSOR VALUE ACCEPT A RANGE FROM 0 TO 1000 

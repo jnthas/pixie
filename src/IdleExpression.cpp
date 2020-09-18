@@ -22,7 +22,6 @@ bool IdleExpression::evaluate(Sensors& sensors, State& state) {
       state.setState(SLEEPING | MOON, LIGHTS_OFF);
     }
    
-
   } else if (sensors.isHot() && 
       sensors.isBright() && 
       !sensors.isMaxTemperature() && 
@@ -37,6 +36,8 @@ bool IdleExpression::evaluate(Sensors& sensors, State& state) {
 
   } else if (sensors.isWatering()) {
     state.setState(HAPPY | WATER, SOIL_WATERED);
+  } else if (sensors.isTouching()) {
+    state.setState(HAPPY, PLANT_TOUCH);
   }
 
 
