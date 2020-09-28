@@ -26,7 +26,7 @@ const unsigned int CURIOUS_SHORT_TIME = 3000;
 
 
 // Sensors readings 
-const float TEMPERATURE_MAX_TOLERANT = 29;
+const float TEMPERATURE_MAX_TOLERANT = 32;
 const float TEMPERATURE_MIN_IDEAL = 12;
 const float TEMPERATURE_MAX_IDEAL = 26;
 

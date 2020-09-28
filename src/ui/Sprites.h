@@ -124,12 +124,12 @@ struct SpriteMetadata
 
 SpriteMetadata sprites[] = {
   { .name = "Loading", .expression = LOADING, .images = PIX_LOADING, .interval = PIX_LOADING_MS, .length = sizeof(PIX_LOADING)/8, .repeats = 10, .intensity = 0 },
-  { .name = "Idle", .expression = IDLE, .images = PIX_IDLE, .interval = PIX_IDLE_MS, .length = sizeof(PIX_IDLE)/8, .repeats = 1, .intensity = 0 },
-  { .name = "Happy", .expression = HAPPY, .images = PIX_HAPPY, .interval = PIX_HAPPY_MS, .length = sizeof(PIX_HAPPY)/8, .repeats = 3, .intensity = 0 },
-  { .name = "Sad", .expression = SAD, .images = PIX_SAD, .interval = PIX_SAD_MS, .length = sizeof(PIX_SAD)/8, .repeats = 3, .intensity = 0 },
-  { .name = "Curious", .expression = CURIOUS, .images = PIX_WHAT, .interval = PIX_WHAT_MS, .length = sizeof(PIX_WHAT)/8, .repeats = 2, .intensity = 0 },
+  { .name = "Idle", .expression = IDLE, .images = PIX_IDLE, .interval = PIX_IDLE_MS, .length = sizeof(PIX_IDLE)/8, .repeats = 1, .intensity = 1 },
+  { .name = "Happy", .expression = HAPPY, .images = PIX_HAPPY, .interval = PIX_HAPPY_MS, .length = sizeof(PIX_HAPPY)/8, .repeats = 3, .intensity = 1 },
+  { .name = "Sad", .expression = SAD, .images = PIX_SAD, .interval = PIX_SAD_MS, .length = sizeof(PIX_SAD)/8, .repeats = 3, .intensity = 1 },
+  { .name = "Curious", .expression = CURIOUS, .images = PIX_WHAT, .interval = PIX_WHAT_MS, .length = sizeof(PIX_WHAT)/8, .repeats = 2, .intensity = 1 },
   { .name = "Sleeping", .expression = SLEEPING, .images = PIX_SLEEP, .interval = PIX_SLEEP_MS, .length = sizeof(PIX_SLEEP)/8, .repeats = 3, .intensity = 0 },
-  { .name = "Sun", .expression = SUN, .images = PIX_SUN, .interval = PIX_SUN_MS, .length = sizeof(PIX_SUN)/8, .repeats = 1, .intensity = 0 },
+  { .name = "Sun", .expression = SUN, .images = PIX_SUN, .interval = PIX_SUN_MS, .length = sizeof(PIX_SUN)/8, .repeats = 1, .intensity = 1 },
   { .name = "Water", .expression = WATER, .images = PIX_WATER, .interval = PIX_WATER_MS, .length = sizeof(PIX_WATER)/8, .repeats = 3, .intensity = 0 },
   { .name = "Heart", .expression = HEART, .images = PIX_HEART, .interval = PIX_HEART_MS, .length = sizeof(PIX_HEART)/8, .repeats = 9, .intensity = 0 },
   { .name = "Moon", .expression = MOON, .images = PIX_MOON, .interval = PIX_MOON_MS, .length = sizeof(PIX_MOON)/8, .repeats = 4, .intensity = 0 }

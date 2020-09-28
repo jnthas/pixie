@@ -21,7 +21,9 @@ void Sensors::read() {
   DHT11.read(SENSOR_TEMPERATURE_PIN);
   ldr = map(analogRead(SENSOR_LIGHT_PIN), 0, MAX_SENSOR_VALUE, 0, 1000);
   pir = map(analogRead(SENSOR_PRESENCE_PIN), 0, MAX_SENSOR_VALUE, 0, 10000);
-  soil = map(MAX_SENSOR_VALUE - analogRead(SENSOR_SOIL_PIN), 0, MAX_SENSOR_VALUE, 0, 1000);
+  
+  
+  soil = map((MAX_SENSOR_VALUE - analogRead(SENSOR_SOIL_PIN)), 0, MAX_SENSOR_VALUE, 0, 1000);
   touch = touchRead(SENSOR_TOUCH_PIN);
   
   temperature = (float) DHT11.temperature;
