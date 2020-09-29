@@ -22,27 +22,24 @@ de customização e melhorias que será apresentado no fim do artigo.
 
 ## Componentes & Ferramentas
 
-Todos os componentes são facilmente encontrados em lojas ou sites especializados.
+A maior parte dos componentes é facilmente encontrada em lojas especializadas ou sites como AliExpress e eBay.
 
-- MCU ESP32 (Um Arduino Nano também pode ser usado caso não queira enviar dados pela internet)
+- MCU ESP32 (an Arduino Nano can be used case you don't intent sending data over internet)
 - LDR
-- Elemento PIR D203S ou similar (é o mesmo sensor usado nos módulos SR501 ou SR505)
-- Sensor de temperatura DHT11
-- Sensor de umidade do solo  
-    - Opte por usar sensores capacitivos ao invés de resistivos, esse vídeo que explica bem porque https://www.youtube.com/watch?v=udmJyncDvw0
-- Matriz de Led 8x8 com MAX7219 integrado
-    - Usei esse modelo https://aliexpress.com/item/32801376173.html, mas poderia ser qualquer similar
+- PIR Element D203S or similar (same used in SR501 or SR505)
+- DHT11
+- Soil Sensor 
+    - Prefere using capacitive soil sensor over resistive, there is a video that explains why https://www.youtube.com/watch?v=udmJyncDvw0
+- Led Matrix 8x8 with MAX7219 integrated
+    - I've used this model https://aliexpress.com/item/32801376173.html, but it can be any similar
 - Resistor 4.7k
 - Resistor 47k
 - Resistor 10k
 
-### Outros 
-
-- Impressora 3d
-- Ferro de Solda
-- Alicate de Corte
-- Fios para ligação do circuito
-
+- 3d printer
+- Soldering Iron
+- Wire Cutter
+- Wire
 
 ## Circuito 
 
