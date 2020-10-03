@@ -7,7 +7,8 @@ Pixie was a project developed with the intention of making the plants we have at
 
 The project has several parameters where it is possible to customize the limits and needs of each case, considering the diversity of plants as well as sensors of different brands. As we know, there are plants that need more sun or water while others can live with fewer resources, such as cacti for example, in cases like this, having parameters is a must have. Throughout this article, I will present the operation and an overview about how to build a Pixie using a little knowledge of electronics, components easily found in the market and a 3d printed case.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/WkV6TZ1BiKc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![](http://img.youtube.com/vi/WkV6TZ1BiKc/0.jpg)](http://www.youtube.com/watch?v=WkV6TZ1BiKc "")
+
 
 More details about how it was made can be seen at https://www.instructables.com/id/Pixie-Let-Your-Plant-Smart/
 
