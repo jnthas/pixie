@@ -1,5 +1,6 @@
 
 # Pixie 
+![Pixie](/project/pixie_idle.jpg)
 
 ## Intro
 
@@ -46,6 +47,8 @@ Todos os componentes são facilmente encontrados em lojas ou sites especializado
 
 ## Circuito 
 
+![Circuit](/project/pixie_bb.png)
+
 O circuito pode ser visto na imagem acima usando um breadboard, mas para ser colocado no case, as conexões devem ser soldados diretamente 
 para ocupar menos espaço. A questão do espaço utilizado foi um ponto importante do projeto, tentei reduzir ao máximo a área que 
 o Pixie ia ocupar. Apesar da case ter ficado pequena, ainda é possível reduzir mais, principalmente desenvolvendo uma PCB 
@@ -61,6 +64,8 @@ exposta de forma que o usuário decide como será a fonte de alimentação assim
 
 ## Design e Impressão 3d
 
+![3d Design](/project/pixie_3d.png)
+
 Juntamente com o circuito, uma case para acomodar os componentes do Pixie foi desenvolvida e impresso numa Ender 3 Pro usando PLA para a compartimeno principal e o frame, e PET para a parte da frente do produto. Alguns conceitos estiveram presentes durante esse desenvolvimento:
 
 - Considerando que o vaso de planta está normalmente em cima de uma mesa, o display foi colocado ligeiramente inclinado para não perder a área de visualização
@@ -70,7 +75,9 @@ Juntamente com o circuito, uma case para acomodar os componentes do Pixie foi de
 - Saída para a conexão com o sensor de solo e toque
 - Considerando os diferentes tamanhos de vasos, a instalação do Pixie na planta pode ser feito de duas formas 
     - Através de uma vareta fixada na terra; ou
+    - <img src="pixie-stick.jpg" width=200>
     - Usando uma cinta que envolve o vaso da planta
+    - <img src="pixie-strap.jpg" width=200>
 
 ### Pontos de melhoria 
 
@@ -84,6 +91,8 @@ O design do Pixie pode ser encontrado no Tinkercad em https://www.tinkercad.com/
 
 
 ## Código
+
+![Code](/project/Pixie%20-%20Main%20Blocks.png)
 
 Como programador, posso dizer que foi a parte mais divertida de se trabalhar, pensar em como estruturar e organizar o código rendeu algumas horas de planejamento
 e o resultado ficou bem satisfatório. O fato da maioria dos sensores usarem uma entrada analógica gerou um tratamento a parte do código de modo a tentar obter 
@@ -104,7 +113,6 @@ Há vários pontos abertos a modificação que permitem customizar o Pixie como 
 Foi necessário implementar uma forma de detectar quando uma ação estava acontecendo em tempo real baseado nas últimas leituras. Isso foi necessário em trẽs casos conhecidos, watering, presence e touch, esses eventos devem ser disparados assim que é detectado uma variação consideravel do sensor e pra isso foi usado
 uma implementação diferente. Um exemplo disso, é o sensor de presença, como foi usado somente o elemento PIR na entrada analógica, os valores lidos são muito variáveis e é necessário uma lógica para se declarar que há presença ou não ao passo que o sensor de temperatura, por sua vez tem uma variação muito baixa e 
 basta a leitura padrão dos seus valores para acertar o comportamento do Pixie.
-
 
 
 ## Evolução do projeto
