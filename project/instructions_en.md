@@ -61,9 +61,9 @@ Some concepts were present during the design of this case:
 - The temperature sensor with opening for external environment to enable a more correct reading
 - Considering the different pot sizes, the installation of Pixie in the plant can be done in two way
   - Through a rod fixed to the earth; or
-  <img src="pixie-stick.jpg" width=200>
+  - <img src="pixie-stick.jpg" width=200>
   - Using a strap that wraps around the plant pot
-  <img src="pixie-strap.jpg" width=200>
+  - <img src="pixie-strap.jpg" width=200>
 
 
 ### Points of improvement
