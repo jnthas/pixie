@@ -3,115 +3,95 @@
 
 ## Intro
 
-Pixie foi um projeto desenvolvido com a intenção de deixar as plantas que temos em casa mais interativas já que pra grande parte das pessoas
-um dos desafios de se ter uma planta em casa é saber como cuidar, com que frequência aguamos, quando e quanto de sol é suficiente, etc.
-Ao tempo que sensores trabalham para obter dados da planta, um display, propositalmente pixelizado (daí o nome Pixie), exibe expressões basicas que 
-indicam o estado da planta, como alegria enquanto ela está sendo aguada ou tristeza caso a temperatura esteja muito alta, indicando que ela deveria 
-ir para um lugar mais fresco.
-Para tornar a experiência ainda mais interessante, foi adicionado outros sensores como de presença, toque e luminosidade traduzindo-se em outras
-expressões que fazem parecer que agora você tem um pet virtual para cuidar.
- 
-O projeto possui diversos parâmetros em que é possivel personalizar os limites e necessidades de cada caso, considerando tanto a diversidade de 
-plantas possiveis quanto sensores de diferentes marcas existentes. Como sabemos, há plantas que precisam mais de sol ou de água enquanto outras
-conseguem viver com menos recursos, como os cactos por exemplo.
+Pixie was a project developed with the intention of making the plants we have at home more interactive, since for most people one of the challenges of having a plant at home is to know how to take care of it, how often we water, when and how much sun is enough, etc. While sensors work to obtain plant data, a LED display, purposely pixelated (hence the name Pixie), displays basic expressions that indicate the state of the plant, such as joy while it is being watered or sadness if the temperature is too high, indicating that it should be taken to a cooler place. To make the experience even more interesting, other sensors such as presence, touch and luminosity have been added, translating into other expressions that make it seem that you now have a virtual pet to take care of.
 
-No decorrer desse artigo, vou apresentar o funcionamento e o passo-a-passo para se construir um Pixie utilizando um pouco de conhecimento de eletrônica,
-componentes facialmente encontrados no mercado e uma impressora 3d para o case. Embora seja um projeto 100% funcional, existem diversas possibiladdes 
-de customização e melhorias que será apresentado no fim do artigo.
+The project has several parameters where it is possible to customize the limits and needs of each case, considering the diversity of plants as well as sensors of different brands. As we know, there are plants that need more sun or water while others can live with fewer resources, such as cacti for example, in cases like this, having parameters is a must have. Throughout this article, I will present the operation and an overview about how to build a Pixie using a little knowledge of electronics, components easily found in the market and a 3d printed case.
+
+Although it's a fully functional project, there are possibilities of customization and improvements that will be presented at the end of the article. I will be glad to answer any question about the project here in the comments or directly to my email or Twitter account.
 
 
-## Componentes & Ferramentas
+## Components & Tools
 
-A maior parte dos componentes é facilmente encontrada em lojas especializadas ou sites como AliExpress e eBay.
+All components are easily found in specialized stores or websites.
 
-- MCU ESP32 (an Arduino Nano can be used case you don't intent sending data over internet)
-- LDR
-- PIR Element D203S or similar (same used in SR501 or SR505)
-- DHT11
-- Soil Sensor 
-    - Prefere using capacitive soil sensor over resistive, there is a video that explains why https://www.youtube.com/watch?v=udmJyncDvw0
-- Led Matrix 8x8 with MAX7219 integrated
-    - I've used this model https://aliexpress.com/item/32801376173.html, but it can be any similar
-- Resistor 4.7k
-- Resistor 47k
-- Resistor 10k
+- 1 MCU ESP32 (ESP8266 can be used or even an Arduino Nano if you do not want to send data over the internet)
+  - I’ve used this model for the project
+- 1 LDR 5mm GL5528
+- 1 PIR element D203S or similar (it is the same sensor used in SR501 or SR505 modules)
+- 1 DHT11 Temperature sensor
+- 1 Soil moisture sensor
+   - Prefer using capacitive soil sensor instead of resistive, this video explains well why https://www.youtube.com/watch?v=udmJyncDvw0
+- 1 Led Matrix 8x8 with integrated MAX7219
+ - I've used this model https://aliexpress.com/item/32801376173.html, but it can be any similar
+   - I used this model, but it could be any similar
+- 1 Resistor 4.7 kΩ 1/4w
+- 1 Resistor 47 kΩ 1/4w
+- 1 Resistor 10 kΩ 1/4w
 
-- 3d printer
+Others
+
+- 3d Printer
 - Soldering Iron
-- Wire Cutter
-- Wire
+- Cutting Pliers
+- Wires for circuit connection
+- USB cable for power supply
 
-## Circuito 
+## Circuit
 
-O circuito pode ser visto na imagem acima usando um breadboard, mas para ser colocado no case, as conexões devem ser soldados diretamente 
-para ocupar menos espaço. A questão do espaço utilizado foi um ponto importante do projeto, tentei reduzir ao máximo a área que 
-o Pixie ia ocupar. Apesar da case ter ficado pequena, ainda é possível reduzir mais, principalmente desenvolvendo uma PCB 
-exclusiva para essa finalidade.
+![Circuit](/project/pixie_bb.png)
 
-PIR:
-https://sites.google.com/a/gr0b.com/0_o/updates/pyroelectricinfraredsensorspirthermograph
+The circuit can be seen in the image above using a breadboard, but to be placed in the case, connections must be soldered directly to take up less space. The question of space used was an important point of the project, I tried to reduce as much as possible the area that Pixie would occupy. Although the case has become small, it is still possible to reduce further, especially by developing an exclusive PCB for this purpose.
 
-Outra questão recorrente em projetos eletrônicos é a bateria, haviam algumas possibildades para esse caso, poderia se usar uma bateria de 9v 
-ou uma recarregável, apesar de ser mais prático, um espaço extra ia ser necessário no case e acabei deixando a saída USB do MCU 
-exposta de forma que o usuário decide como será a fonte de alimentação assim como o upload da sketch.
+Presence detection was done using only one PIR element instead of a complete module such as SR501 or SR505, since the integrated timer and the wide actuation range exceeding five meters were not required. Using only the PIR element the sensitivity decreased and the presence detection is done via software. More details of the connection can be seen here. https://sites.google.com/a/gr0b.com/0_o/updates/pyroelectricinfraredsensorspirthermograph
+
+Another recurring issue in electronic projects is the battery, there were some possibilities for this project like a 9v battery or a rechargeable one. Although it was more practical, an extra space was going to be needed in the case and I ended up leaving the USB output of the MCU exposed so that the user decides how the power supply will be and making it easier to upload the sketch.
 
 
-## Design e Impressão 3d
+## 3D Design and Printing
 
-Juntamente com o circuito, uma case para acomodar os componentes do Pixie foi desenvolvida e impresso numa Ender 3 Pro usando PLA para a compartimeno principal e o frame, e PET para a parte da frente do produto. Alguns conceitos estiveram presentes durante esse desenvolvimento:
+Along with the circuit, a case to accommodate the Pixie components was developed and printed on an Ender 3 Pro using PLA. The STL files were included here.
+Some concepts were present during the design of this case:
 
-- Considerando que o vaso de planta está normalmente em cima de uma mesa, o display foi colocado ligeiramente inclinado para não perder a área de visualização
-- Projetado para evitar qualquer tipo de suporte de impressão 
-- Favorece a troca de partes por outras cores de forma a deixar o produto mais personalizado, design intercambiável e de encaixe
-- O sensor de temperatura com abertura pro ambiente externo a possibilitar uma leitura mais correta
-- Saída para a conexão com o sensor de solo e toque
-- Considerando os diferentes tamanhos de vasos, a instalação do Pixie na planta pode ser feito de duas formas 
-    - Através de uma vareta fixada na terra; ou
-    - Usando uma cinta que envolve o vaso da planta
+- Since the plant pot is normally on a table, the display has been placed slightly tilted in order not to lose the viewing area
+- Designed to avoid the use of printing supports
+- Encourages the exchange of parts for other colors in order to make the product more personalized, interchangeable and fitting design
+- The temperature sensor with opening for external environment to enable a more correct reading
+- Considering the different pot sizes, the installation of Pixie in the plant can be done in two way
+- Through a rod fixed to the earth; or
+ - Using a strap that wraps around the plant pot
+ - Points of improvement
 
-### Pontos de melhoria 
+Although functional, there are some points in the design that must be modified, such as the size of the walls that have been defined in order to avoid loss of material and speed up printing during prototyping by 1mm.
 
-Embora funcional, existem alguns pontos no design que devem ser modificados, como o tamanho das paredes que foram definidos fim de evitar perda de 
-material e agilizar a impressão durante a prototipação em 1mm.
-
-Os encaixes precisam ser melhorados aplicando os padrões de design em impressão 3d, é muito provável que seja necessário ajustar o tamanho do encaixe da vareta 
-e do stand para que fique com tamanho ideal após impresso.
-
-O design do Pixie pode ser encontrado no Tinkercad em https://www.tinkercad.com/things/9b4d1D7Ybnd e do stand em https://www.tinkercad.com/things/aHyDhaKDAj6.
+The fittings need to be improved by applying the design patterns in 3d printing, probably it will be necessary to adjust the size of the stick and stand fitting in order to snap the pieces correctly.
 
 
-## Código
+## Code
+![Code](/project/Pixie - Main Blocks.png)
 
-Como programador, posso dizer que foi a parte mais divertida de se trabalhar, pensar em como estruturar e organizar o código rendeu algumas horas de planejamento
-e o resultado ficou bem satisfatório. O fato da maioria dos sensores usarem uma entrada analógica gerou um tratamento a parte do código de modo a tentar obter 
-uma leitura mais fiel tentando ignorar ao máximo falsos positivos. Foi criado um diagrama com os principais blocos de código que pode ser visto abaixo, para mais
-detalhes recomendo acessar o repositório presente em https://github.com/jnthas/pixie
+As a programmer, I can say that it was the most fun part of working, thinking about how to structure and organize the code, took a few hours of planning and the result was quite satisfactory. The fact that most sensors use an analog input generated a separate treatment of the code in order to try to obtain a more accurate reading trying to ignore false positives as much as possible. The diagram above was created with the main blocks of code and it illustrates the core functionality, for more details I recommend taking a look at the code at https://github.com/jnthas/pixie.
 
-Há vários pontos abertos a modificação que permitem customizar o Pixie como desejar. Entre eles posso destacar:
+There are several points open to modification that allow you to customize Pixie as you wish. Among them I can highlight:
 
-- Tempo de leitura dos sensores
-- Tempo de timout de algumas expressões
-- Limites max e min de temperatura, iluminação e solo assim como o threshold dos sensores
-- Intensidade luminosa de cada expressão
-- Tempo entre frames de cada expressão
-- As animações estão separadas do código permitindo modificar caso assim o queira
+- Sensor reading frequency
+- Timeout of expressions
+- Max and min temperature, lighting and ground limits as well as the threshold of sensors
+- Display light intensity of each expression
+- Time between frames of each expression
+- The animations are separated from the code allowing you to modify them if you wish
 
 ### Triggers
 
-Foi necessário implementar uma forma de detectar quando uma ação estava acontecendo em tempo real baseado nas últimas leituras. Isso foi necessário em trẽs casos conhecidos, watering, presence e touch, esses eventos devem ser disparados assim que é detectado uma variação consideravel do sensor e pra isso foi usado
-uma implementação diferente. Um exemplo disso, é o sensor de presença, como foi usado somente o elemento PIR na entrada analógica, os valores lidos são muito variáveis e é necessário uma lógica para se declarar que há presença ou não ao passo que o sensor de temperatura, por sua vez tem uma variação muito baixa e 
-basta a leitura padrão dos seus valores para acertar o comportamento do Pixie.
+It was necessary to implement a way to detect when an action was happening in real time based on the last readings. This was necessary in three known cases, watering, presence and touch, these events should be triggered as soon as a considerable variation of the sensor is detected and for this a different implementation was used. An example of this is the presence sensor, as only the PIR element was used in the analog input, the values read variates often and a logic was necessary to declare that there is presence or not while the temperature sensor, in turn, has a very low variation and just the standard reading of its values is enough to adjust the behavior of the Pixie.
 
+## Project Next Steps
 
-
-## Evolução do projeto
-
-- Se tornar um dispositivo IoT e passar a enviar dados pra uma plataforma via MQTT
-- App pra customização dos parametros e talvez das faces
-- Fazer o touch funcionar ao tocar na planta (https://www.instructables.com/id/Touche-for-Arduino-Advanced-touch-sensing/)
-- Incluir bateria 
-- Imprimir o vaso completo nao somento o case do Pixie
-- Incluir uma Piezo no projeto para tocar sons dependendo das expressões
-- Extender a memória da Pixie com dados históricos (muito tempo sem detectar presença)
-- Sensor UV
-
+- Become a IoT device and start sending data to a platform via MQTT
+- An App for customization of parameters and maybe the expressions
+- Make the touch work by touching the plant. I found a great example of Touche-like project on Instructables
+- Include a battery
+- Design a PCB
+- Print the complete vase not only the case of the Pixie
+- Include a piezo in the project to play sounds accordingly the expressions
+- Extend the Pixie's “memory” with historical data (too long without detecting presence could generate a sad expression)
+- UV sensor to detect a Sun exposure more accurate
