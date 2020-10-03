@@ -1,5 +1,7 @@
 
 # Pixie 
+![Pixie](/project/pixie_idle.jpg)
+
 
 ## Intro
 
@@ -48,6 +50,7 @@ Another recurring issue in electronic projects is the battery, there were some p
 
 
 ## 3D Design and Printing
+![3d Design](/project/pixie_3d.png)
 
 Along with the circuit, a case to accommodate the Pixie components was developed and printed on an Ender 3 Pro using PLA. The STL files were included here.
 Some concepts were present during the design of this case:
@@ -57,9 +60,13 @@ Some concepts were present during the design of this case:
 - Encourages the exchange of parts for other colors in order to make the product more personalized, interchangeable and fitting design
 - The temperature sensor with opening for external environment to enable a more correct reading
 - Considering the different pot sizes, the installation of Pixie in the plant can be done in two way
-- Through a rod fixed to the earth; or
- - Using a strap that wraps around the plant pot
- - Points of improvement
+  - Through a rod fixed to the earth; or
+  ![Stick](/project/pixie-stick.jpg)
+  - Using a strap that wraps around the plant pot
+  ![Strap](/project/pixie-strap.jpg)
+
+
+### Points of improvement
 
 Although functional, there are some points in the design that must be modified, such as the size of the walls that have been defined in order to avoid loss of material and speed up printing during prototyping by 1mm.
 
