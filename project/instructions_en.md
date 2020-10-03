@@ -67,7 +67,7 @@ The fittings need to be improved by applying the design patterns in 3d printing,
 
 
 ## Code
-![Code](/project/Pixie - Main Blocks.png)
+![Code]("/project/Pixie - Main Blocks.png")
 
 As a programmer, I can say that it was the most fun part of working, thinking about how to structure and organize the code, took a few hours of planning and the result was quite satisfactory. The fact that most sensors use an analog input generated a separate treatment of the code in order to try to obtain a more accurate reading trying to ignore false positives as much as possible. The diagram above was created with the main blocks of code and it illustrates the core functionality, for more details I recommend taking a look at the code at https://github.com/jnthas/pixie.
 
